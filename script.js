@@ -1,45 +1,41 @@
-//your JS code here. If required.
-//your JS code here. If required.
+let currentStep = 1;
 const circles = document.querySelectorAll('.circle');
 const prevButton = document.getElementById('prev');
 const nextButton = document.getElementById('next');
-let currentActive = 1;
 
-nextButton.addEventListener('click', () => {
-  currentActive++;
+function updateButtons() {
+  prevButton.disabled = currentStep === 1;
+  nextButton.disabled = currentStep === circles.length;
+}
 
-  if (currentActive > circles.length) {
-    currentActive = circles.length;
-  }
-
-  update();
-});
-
-prevButton.addEventListener('click', () => {
-  currentActive--;
-
-  if (currentActive < 1) {
-    currentActive = 1;
-  }
-
-  update();
-});
-
-function update() {
+function updateProgress() {
   circles.forEach((circle, index) => {
-    if (index < currentActive) {
+    if (index < currentStep) {
       circle.classList.add('active');
     } else {
       circle.classList.remove('active');
     }
   });
 
-  if (currentActive === 1) {
-    prevButton.disabled = true;
-  } else if (currentActive === circles.length) {
-    nextButton.disabled = true;
-  } else {
-    prevButton.disabled = false;
-    nextButton.disabled = false;
+  const lines = document.querySelectorAll('.line');
+  lines.forEach((line, index) => {
+    line.style.backgroundColor = index < currentStep - 1 ? 'blue' : '#ccc';
+  });
+}
+
+
+function prevStep() {
+  if (currentStep > 1) {
+    currentStep--;
+    updateProgress();
+    updateButtons();
+  }
+}
+
+function nextStep() {
+  if (currentStep < circles.length) {
+    currentStep++;
+    updateProgress();
+    updateButtons();
   }
 }
